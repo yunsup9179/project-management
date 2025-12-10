@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hyundai Glovis Irvine EV Charger Installation Schedule</title>
+    <style>
+        /* --- General Reset & Typography --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #ffffff; color: #333; padding: 20px; }
+        
+        /* --- Layout Container --- */
+        .container { max-width: 1200px; margin: 0 auto; background: white; }
+        
+        /* --- Header --- */
+        header { border-bottom: 2px solid #333; padding-bottom: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end; }
+        h1 { font-size: 24px; color: #1a1a1a; margin-bottom: 5px; }
+        .subtitle { font-size: 16px; color: #666; font-weight: 500; }
+        .logo { font-weight: bold; color: #002c5f; font-size: 18px; }
+
+        /* --- Gantt Chart Structure --- */
+        .chart-wrapper { display: flex; border: 1px solid #e0e0e0; border-radius: 4px; overflow: hidden; }
+        
+        /* Left Sidebar (Task List) */
+        .sidebar { width: 350px; flex-shrink: 0; border-right: 1px solid #e0e0e0; background-color: #fafafa; }
+        .sidebar-header { height: 50px; background: #f5f5f5; border-bottom: 1px solid #e0e0e0; display: flex; align-items: center; padding-left: 15px; font-weight: bold; font-size: 13px; color: #555; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        .phase-header { background-color: #eaeff5; padding: 10px 15px; font-size: 12px; font-weight: 700; color: #333; border-bottom: 1px solid #e0e0e0; border-top: 1px solid #e0e0e0; letter-spacing: 0.5px; }
+        .phase-header.p1 { border-left: 5px solid #2563eb; color: #1e40af; background: #eff6ff; }
+        .phase-header.p2 { border-left: 5px solid #f59e0b; color: #92400e; background: #fffbeb; }
+        .phase-header.p3 { border-left: 5px solid #10b981; color: #065f46; background: #ecfdf5; }
+
+        .task-row { height: 40px; display: flex; flex-direction: column; justify-content: center; padding: 0 15px; border-bottom: 1px solid #f0f0f0; background: white; }
+        .task-name { font-size: 13px; font-weight: 500; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .task-date { font-size: 11px; color: #888; margin-top: 2px; }
+
+        /* Right Timeline */
+        .timeline { flex-grow: 1; position: relative; background: white; overflow: hidden; }
+        
+        /* Timeline Headers (Months) */
+        .timeline-header { height: 50px; display: flex; border-bottom: 1px solid #e0e0e0; background: #f5f5f5; }
+        .month-cell { flex: 1; border-right: 1px solid #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: #555; text-transform: uppercase; }
+        
+        /* Grid Lines */
+        .grid-container { position: absolute; top: 50px; left: 0; right: 0; bottom: 0; display: flex; }
+        .grid-month { flex: 1; border-right: 1px solid #eee; position: relative; }
+        /* Simple weekly dashed lines simulation */
+        .grid-week { position: absolute; top: 0; bottom: 0; border-right: 1px dashed #f5f5f5; }
+
+        /* Bars Container */
+        .bars-container { position: relative; top: 0; }
+        /* Phase Spacers in Timeline to match sidebar */
+        .timeline-phase-spacer { height: 37px; border-bottom: 1px solid #f0f0f0; background: #fafafa; opacity: 0.5; } 
+        
+        .bar-row { height: 40px; border-bottom: 1px solid transparent; position: relative; width: 100%; }
+        
+        /* The Bar Itself */
+        .bar { position: absolute; top: 10px; height: 20px; border-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); display: flex; align-items: center; padding: 0 5px; font-size: 10px; color: white; overflow: hidden; white-space: nowrap; }
+        .bar.milestone { width: 14px; height: 14px; top: 13px; transform: rotate(45deg); border-radius: 2px; border: 1px solid white; }
+        
+        /* Colors */
+        .color-p1 { background-color: #3b82f6; border: 1px solid #2563eb; }
+        .color-p2 { background-color: #f59e0b; border: 1px solid #d97706; }
+        .color-p2-light { background-color: #fcd34d; border: 1px dashed #d97706; color: #92400e; opacity: 0.8; }
+        .color-p3 { background-color: #10b981; border: 1px solid #059669; }
+        
+        /* Legend */
+        .legend { margin-top: 20px; display: flex; gap: 20px; font-size: 12px; color: #555; padding-top: 10px; border-top: 1px solid #eee; }
+        .legend-item { display: flex; align-items: center; gap: 8px; }
+        .legend-box { width: 12px; height: 12px; border-radius: 2px; }
+
+        /* Print Settings */
+        @media print {
+            body { padding: 0; margin: 0; }
+            .container { width: 100%; max-width: none; box-shadow: none; }
+            @page { size: landscape; margin: 1cm; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div>
+            <h1>Hyundai Glovis Irvine EV Charger Installation</h1>
+            <div class="subtitle">Project Schedule: Dec 2025 – Feb 2026</div>
+        </div>
+        <div class="logo">GANTT SCHEDULE</div>
+    </header>
+
+    <div class="chart-wrapper">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">Phase / Task</div>
+
+            <!-- Phase 1 -->
+            <div class="phase-header p1">PHASE 1 — CONTRACT & DESIGN</div>
+            <div class="task-row">
+                <div class="task-name">Contract Executed</div>
+                <div class="task-date">12/4/2025</div>
+            </div>
+            <div class="task-row">
+                <div class="task-name">Design Set Created for Permit</div>
+                <div class="task-date">12/9/2025 – 12/23/2025</div>
+            </div>
+
+            <!-- Phase 2 -->
+            <div class="phase-header p2">PHASE 2 — PERMITTING</div>
+            <div class="task-row">
+                <div class="task-name">Permit Application Submitted</div>
+                <div class="task-date">12/29/2025</div>
+            </div>
+            <div class="task-row">
+                <div class="task-name">City Plan Check Review</div>
+                <div class="task-date">12/29/2025 – 2/9/2026</div>
+            </div>
+            <div class="task-row">
+                <div class="task-name">Permit Approved</div>
+                <div class="task-date">2/11/2026</div>
+            </div>
+
+            <!-- Phase 3 -->
+            <div class="phase-header p3">PHASE 3 — CONSTRUCTION & EXECUTION</div>
+            <div class="task-row">
+                <div class="task-name">Pre-Con Meeting</div>
+                <div class="task-date">2/16/2026</div>
+            </div>
+            <div class="task-row">
+                <div class="task-name">Mobilization</div>
+                <div class="task-date">2/18/2026</div>
+            </div>
+            <div class="task-row">
+                <div class="task-name">Construction Period</div>
+                <div class="task-date">2/18/2026 – 2/26/2026</div>
+            </div>
+            <div class="task-row">
+                <div class="task-name">Construction Completion</div>
+                <div class="task-date">2/26/2026</div>
+            </div>
+            <div class="task-row">
+                <div class="task-name">Final Inspection & System Testing</div>
+                <div class="task-date">2/27/2026</div>
+            </div>
+        </div>
+
+        <!-- Timeline Area -->
+        <div class="timeline">
+            <!-- Headers -->
+            <div class="timeline-header">
+                <div class="month-cell" style="flex: 0.33;">DEC '25</div> <!-- Approx 31 days -->
+                <div class="month-cell" style="flex: 0.33;">JAN '26</div> <!-- Approx 31 days -->
+                <div class="month-cell" style="flex: 0.29;">FEB '26</div> <!-- Approx 28 days -->
+                <div class="month-cell" style="flex: 0.05;">MAR</div>     <!-- Approx 5 days -->
+            </div>
+
+            <!-- Grid Lines -->
+            <div class="grid-container">
+                <div class="grid-month" style="flex: 0.33;">
+                    <div class="grid-week" style="left: 25%"></div><div class="grid-week" style="left: 50%"></div><div class="grid-week" style="left: 75%"></div>
+                </div>
+                <div class="grid-month" style="flex: 0.33;">
+                    <div class="grid-week" style="left: 25%"></div><div class="grid-week" style="left: 50%"></div><div class="grid-week" style="left: 75%"></div>
+                </div>
+                <div class="grid-month" style="flex: 0.29;">
+                    <div class="grid-week" style="left: 25%"></div><div class="grid-week" style="left: 50%"></div><div class="grid-week" style="left: 75%"></div>
+                </div>
+                <div class="grid-month" style="flex: 0.05;"></div>
+            </div>
+
+            <!-- Bars -->
+            <div class="bars-container">
+                <!-- Calc Basis: Total 95 days (Dec 1 to Mar 5) -->
+                <!-- 1% approx 0.95 days -->
+
+                <!-- Spacer P1 -->
+                <div class="timeline-phase-spacer"></div>
+                <!-- Contract Executed (Dec 4) -> Day 3/95 = 3.1% -->
+                <div class="bar-row">
+                    <div class="bar milestone color-p1" style="left: 3.1%;" title="12/4"></div>
+                </div>
+                <!-- Design Set (Dec 9 - Dec 23) -> Day 8/95 to 22/95 -> Left 8.4%, Width 14.7% -->
+                <div class="bar-row">
+                    <div class="bar color-p1" style="left: 8.4%; width: 14.7%;">Design Set</div>
+                </div>
+
+                <!-- Spacer P2 -->
+                <div class="timeline-phase-spacer"></div>
+                <!-- Permit App (Dec 29) -> Day 28/95 -> Left 29.4% -->
+                <div class="bar-row">
+                    <div class="bar milestone color-p2" style="left: 29.4%;" title="12/29"></div>
+                </div>
+                <!-- City Plan Check (Dec 29 - Feb 9) -> Day 28 to 70 -> Left 29.4%, Width 44.2% -->
+                <div class="bar-row">
+                    <div class="bar color-p2-light" style="left: 29.4%; width: 44.2%;">Waiting for approval...</div>
+                </div>
+                <!-- Permit Approved (Feb 11) -> Day 72/95 -> Left 75.7% -->
+                <div class="bar-row">
+                    <div class="bar milestone color-p2" style="left: 75.7%;" title="2/11"></div>
+                </div>
+
+                <!-- Spacer P3 -->
+                <div class="timeline-phase-spacer"></div>
+                <!-- Pre-Con (Feb 16) -> Day 77/95 -> Left 81.0% -->
+                <div class="bar-row">
+                    <div class="bar milestone color-p3" style="left: 81.0%;" title="2/16"></div>
+                </div>
+                <!-- Mobilization (Feb 18) -> Day 79/95 -> Left 83.1% -->
+                <div class="bar-row">
+                    <div class="bar milestone color-p3" style="left: 83.1%;" title="2/18"></div>
+                </div>
+                <!-- Construction (Feb 18 - Feb 26) -> Day 79 to 87 -> Left 83.1%, Width 8.4% -->
+                <div class="bar-row">
+                    <div class="bar color-p3" style="left: 83.1%; width: 8.4%;"></div>
+                </div>
+                <!-- Completion (Feb 26) -> Day 87/95 -> Left 91.5% -->
+                <div class="bar-row">
+                    <div class="bar milestone color-p3" style="left: 91.5%;" title="2/26"></div>
+                </div>
+                <!-- Final Insp (Feb 27) -> Day 88/95 -> Left 92.6% -->
+                <div class="bar-row">
+                    <div class="bar milestone color-p3" style="left: 92.6%;" title="2/27"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="legend">
+        <div class="legend-item"><div class="legend-box color-p1"></div> Phase 1: Contract & Design</div>
+        <div class="legend-item"><div class="legend-box color-p2"></div> Phase 2: Permitting</div>
+        <div class="legend-item"><div class="legend-box color-p3"></div> Phase 3: Construction</div>
+        <div class="legend-item"><div class="legend-box" style="background:none; border: 1px solid #999; transform: rotate(45deg); width: 10px; height: 10px;"></div> Milestone</div>
+    </div>
+</div>
+
+</body>
+</html>

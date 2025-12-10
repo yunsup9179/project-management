@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EV Charging Project Incentive Pipeline</title>
+    <style>
+        /* --- General Reset & Fonts --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        body { 
+            /* 가독성이 좋은 폰트 스택으로 변경 */
+            font-family: 'Inter', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Segoe UI', sans-serif; 
+            background-color: #ffffff; 
+            color: #111; /* 글자색을 더 진하게 변경 */
+            padding: 40px; 
+            line-height: 1.4;
+        }
+
+        /* --- Layout --- */
+        .container { 
+            max-width: 1280px; /* 너비를 조금 더 넓힘 */
+            margin: 0 auto; 
+            background: white; 
+        }
+
+        /* --- Header Section --- */
+        header { 
+            border-bottom: 5px solid #002c5f; 
+            padding-bottom: 25px; 
+            margin-bottom: 35px; 
+        }
+        h1 { 
+            font-size: 36px; /* 제목 크기 확대 */
+            color: #002c5f; 
+            font-weight: 800; 
+            margin-bottom: 8px; 
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+        }
+        .subtitle { 
+            font-size: 22px; /* 부제목 크기 확대 */
+            color: #444; 
+            font-weight: 600; 
+            margin-bottom: 15px;
+        }
+        .description {
+            font-size: 16px; /* 설명글 크기 확대 */
+            color: #555;
+            font-weight: 500;
+            max-width: 1000px;
+            line-height: 1.6;
+        }
+
+        /* --- Summary Box --- */
+        .summary-box {
+            display: flex;
+            gap: 60px; /* 간격 확대 */
+            background-color: #f0f4f8;
+            border: 2px solid #dde1e6;
+            padding: 25px 30px;
+            border-radius: 8px;
+            margin-bottom: 35px;
+        }
+        .summary-item {
+            display: flex;
+            flex-direction: column;
+        }
+        .summary-label {
+            font-size: 14px; /* 라벨 크기 확대 */
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #555;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .summary-value {
+            font-size: 32px; /* 총액 크기 대폭 확대 */
+            font-weight: 800;
+            color: #002c5f;
+            font-family: 'Roboto Mono', 'Consolas', monospace; /* 숫자용 폰트 */
+            letter-spacing: -1px;
+        }
+
+        /* --- Main Table --- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px; /* 테이블 기본 폰트 크기 확대 */
+        }
+        
+        th {
+            background-color: #002c5f;
+            color: white;
+            text-align: left;
+            padding: 16px 12px; /* 헤더 패딩 확대 */
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 14px; /* 헤더 폰트 확대 */
+            letter-spacing: 0.5px;
+            border-bottom: 3px solid #000;
+        }
+        
+        /* Align specific columns */
+        th:nth-child(4), th:nth-child(5) { text-align: right; } /* Costs Header Right Align */
+        th:nth-child(6) { text-align: center; } /* Date Header Center Align */
+
+        td {
+            padding: 14px 12px; /* 셀 패딩 확대 (여백 확보) */
+            border-bottom: 1px solid #ddd;
+            color: #222;
+            vertical-align: middle;
+        }
+
+        /* Project Name Column - Make it bold */
+        td:nth-child(2) {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        /* Configuration Column */
+        td:nth-child(3) {
+            color: #555;
+            font-size: 14px;
+        }
+
+        /* Currency Columns (Important!) */
+        td:nth-child(4), td:nth-child(5) {
+            text-align: right;
+            font-family: 'Roboto Mono', 'Consolas', 'Monaco', monospace; /* 고정폭 폰트로 자릿수 맞춤 */
+            font-weight: 600;
+            font-size: 16px;
+            color: #111;
+        }
+        /* Date Column */
+        td:nth-child(6) { 
+            text-align: center; 
+            font-weight: 500;
+            color: #444;
+        }
+
+        /* Row Group Headers (Quarters) */
+        .quarter-row td {
+            background-color: #e3e8ee;
+            font-weight: 800;
+            font-size: 17px;
+            color: #002c5f;
+            padding: 12px 15px;
+            border-top: 3px solid #fff;
+        }
+
+        /* Subtotal Rows */
+        .subtotal-row td {
+            background-color: #f7f9fa;
+            font-weight: 700;
+            color: #333;
+            border-top: 2px solid #bbb; /* 구분선 진하게 */
+            border-bottom: 2px solid #bbb;
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+        .subtotal-label {
+            text-align: right;
+            padding-right: 20px;
+            font-style: italic;
+            font-size: 15px;
+            color: #666;
+        }
+        /* Subtotal Values */
+        .subtotal-row td:nth-child(2), 
+        .subtotal-row td:nth-child(3) {
+            color: #000;
+            font-size: 17px;
+        }
+
+        /* Grand Total Row */
+        .grand-total-row td {
+            background-color: #002c5f;
+            color: white !important;
+            font-weight: 800;
+            font-size: 18px;
+            padding: 20px 12px;
+            border-top: 4px solid #000;
+        }
+        /* Force text color for grand total cells overrides */
+        .grand-total-row td:nth-child(4), 
+        .grand-total-row td:nth-child(5) {
+            color: #ffeb3b !important; /* 총계는 눈에 띄게 노란색 틴트 */
+            font-size: 20px;
+        }
+
+        /* Print Settings */
+        @media print {
+            body { padding: 0; margin: 0; }
+            .container { width: 100%; max-width: none; }
+            @page { size: landscape; margin: 0.5cm; }
+            /* Ensure background colors print */
+            th, .quarter-row td, .subtotal-row td, .grand-total-row td, .summary-box {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+    <!-- Google Fonts for better rendering -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>EV Charging Project Incentive Pipeline</h1>
+        <div class="subtitle">Project Portfolio for Project Financing – As of 2026</div>
+        <div class="description">
+            This table summarizes our near-term EV charging deployment projects, associated capital costs, reserved incentives, and expected incentive issuance schedule. We are presenting this portfolio in support of a project financing discussion.
+        </div>
+    </header>
+
+    <!-- Portfolio Summary -->
+    <div class="summary-box">
+        <div class="summary-item">
+            <span class="summary-label">Total Project Cost</span>
+            <span class="summary-value">$7,582,055.83</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label">Total Incentives Reserved</span>
+            <span class="summary-value">$7,010,558.00</span>
+        </div>
+    </div>
+
+    <!-- Main Data Table -->
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 8%;">Quarter</th>
+                <th style="width: 30%;">Project Name</th>
+                <th style="width: 14%;">Configuration</th>
+                <th style="width: 16%;">Project Cost</th>
+                <th style="width: 16%;">Incentives Reserved</th>
+                <th style="width: 16%;">Incentives Issuance</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            <!-- Q1 Section -->
+            <tr class="quarter-row">
+                <td colspan="6">Q1 – Start</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>UC Santa Cruz</td>
+                <td>(6) x 160kW</td>
+                <td>$442,131.89</td>
+                <td>$330,000.00</td>
+                <td>4/15/2026</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>David Sills Community Park Irvine</td>
+                <td>(4) x 160kW</td>
+                <td>$195,907.70</td>
+                <td>$123,044.00</td>
+                <td>4/15/2026</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>North Monterey Unified School District</td>
+                <td>(7) x 19.2kW</td>
+                <td>$104,037.00</td>
+                <td>$275,000.00</td>
+                <td>3/15/2026</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>2101 Imperial Hwy</td>
+                <td>(8) x 180kW</td>
+                <td>$556,000.00</td>
+                <td>$707,385.00</td>
+                <td>5/15/2026</td>
+            </tr>
+            <tr class="subtotal-row">
+                <td colspan="3" class="subtotal-label">Q1 Subtotal</td>
+                <td>$1,298,076.59</td>
+                <td>$1,435,429.00</td>
+                <td></td>
+            </tr>
+
+            <!-- Q2 Section -->
+            <tr class="quarter-row">
+                <td colspan="6">Q2 – Start</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>Cabrillo Pavilion</td>
+                <td>(2) x 19.2kW</td>
+                <td>$59,000.00</td>
+                <td>$92,000.00</td>
+                <td>7/15/2026</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>Irvine Fieldhouse</td>
+                <td>(19) x 7.2kW</td>
+                <td>$32,048.70</td>
+                <td>$0.00</td>
+                <td>N/A</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>Butte Valley Unified School District</td>
+                <td>(3) x 60kW</td>
+                <td>$158,601.79</td>
+                <td>$275,000.00</td>
+                <td>6/15/2026</td>
+            </tr>
+            <tr class="subtotal-row">
+                <td colspan="3" class="subtotal-label">Q2 Subtotal</td>
+                <td>$249,650.49</td>
+                <td>$367,000.00</td>
+                <td></td>
+            </tr>
+
+            <!-- Q3 Section -->
+            <tr class="quarter-row">
+                <td colspan="6">Q3 – Start</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>ChiLL-2</td>
+                <td>(346) x 9.6kW</td>
+                <td>$4,036,063.38</td>
+                <td>$3,199,099.00</td>
+                <td>Progress billing</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>Portola Springs Community Park</td>
+                <td>(2) x 180kW</td>
+                <td>$222,250.00</td>
+                <td>$220,200.00</td>
+                <td>10/15/2026</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>FAST 2.0</td>
+                <td>(10) x 240kW</td>
+                <td>$1,343,902.37</td>
+                <td>$1,458,830.00</td>
+                <td>Progress billing</td>
+            </tr>
+            <tr class="subtotal-row">
+                <td colspan="3" class="subtotal-label">Q3 Subtotal</td>
+                <td>$5,602,215.75</td>
+                <td>$4,878,129.00</td>
+                <td></td>
+            </tr>
+
+            <!-- Q4 Section -->
+            <tr class="quarter-row">
+                <td colspan="6">Q4 – Start</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>Heritage Community Park</td>
+                <td>(12) x 7.2kW</td>
+                <td>$20,363.00</td>
+                <td>$0.00</td>
+                <td>N/A</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>Irvine Civic Center</td>
+                <td>(6) x 180kW</td>
+                <td>$411,750.00</td>
+                <td>$330,000.00</td>
+                <td>1/30/2027</td>
+            </tr>
+            <tr class="subtotal-row">
+                <td colspan="3" class="subtotal-label">Q4 Subtotal</td>
+                <td>$432,113.00</td>
+                <td>$330,000.00</td>
+                <td></td>
+            </tr>
+
+            <!-- Grand Total -->
+            <tr class="grand-total-row">
+                <td colspan="3" style="text-align: right; padding-right: 20px;">GRAND TOTAL</td>
+                <td>$7,582,055.83</td>
+                <td>$7,010,558.00</td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
