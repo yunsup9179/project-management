@@ -34,6 +34,16 @@ export async function signOut() {
     }
   } catch (error) {
     console.error('Unexpected signOut error:', error);
+  } finally {
+    // Force clear all Supabase auth data from localStorage
+    if (typeof window !== 'undefined') {
+      const keys = Object.keys(localStorage);
+      keys.forEach(key => {
+        if (key.startsWith('sb-') || key.includes('supabase')) {
+          localStorage.removeItem(key);
+        }
+      });
+    }
   }
 }
 
@@ -43,6 +53,15 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
 
     if (userError) {
       console.error('Error getting user:', userError);
+      // Clear invalid session data
+      if (typeof window !== 'undefined') {
+        const keys = Object.keys(localStorage);
+        keys.forEach(key => {
+          if (key.startsWith('sb-') || key.includes('supabase')) {
+            localStorage.removeItem(key);
+          }
+        });
+      }
       return null;
     }
 
@@ -71,6 +90,15 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
     };
   } catch (error) {
     console.error('Unexpected error in getCurrentUser:', error);
+    // Clear session on unexpected errors
+    if (typeof window !== 'undefined') {
+      const keys = Object.keys(localStorage);
+      keys.forEach(key => {
+        if (key.startsWith('sb-') || key.includes('supabase')) {
+          localStorage.removeItem(key);
+        }
+      });
+    }
     return null;
   }
 }
