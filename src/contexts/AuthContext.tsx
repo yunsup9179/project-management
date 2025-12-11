@@ -37,6 +37,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await loadUser();
       } else if (event === 'SIGNED_OUT') {
         setUser(null);
+        setLoading(false);
       }
     });
 
@@ -46,8 +47,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signOut = async () => {
-    await authSignOut();
-    setUser(null);
+    try {
+      setLoading(true);
+      await authSignOut();
+      setUser(null);
+    } catch (error) {
+      console.error('Error signing out:', error);
+      // Even if signOut fails, clear local state
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const refreshUser = async () => {

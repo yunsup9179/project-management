@@ -27,26 +27,52 @@ export async function signIn(email: string, password: string) {
 }
 
 export async function signOut() {
-  const { error } = await supabase.auth.signOut();
-  if (error) throw error;
+  try {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error('Supabase signOut error:', error);
+    }
+  } catch (error) {
+    console.error('Unexpected signOut error:', error);
+  }
 }
 
 export async function getCurrentUser(): Promise<AuthUser | null> {
-  const { data: { user } } = await supabase.auth.getUser();
+  try {
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
 
-  if (!user) return null;
+    if (userError) {
+      console.error('Error getting user:', userError);
+      return null;
+    }
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', user.id)
-    .single();
+    if (!user) return null;
 
-  return {
-    id: user.id,
-    email: user.email!,
-    profile: profile as UserProfile
-  };
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .single();
+
+    if (profileError) {
+      console.error('Error fetching profile:', profileError);
+      // Return user without profile if profile fetch fails
+      return {
+        id: user.id,
+        email: user.email!,
+        profile: null
+      };
+    }
+
+    return {
+      id: user.id,
+      email: user.email!,
+      profile: profile as UserProfile
+    };
+  } catch (error) {
+    console.error('Unexpected error in getCurrentUser:', error);
+    return null;
+  }
 }
 
 export async function getUserProfile(userId: string): Promise<UserProfile | null> {
