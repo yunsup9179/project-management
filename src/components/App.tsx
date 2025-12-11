@@ -47,10 +47,18 @@ function App() {
         // Automatically show chart if project has tasks
         setShowChart(project.tasks.length > 0);
         setShowProjectList(false);
+      } else {
+        // Project not found (Supabase not configured)
+        alert('Unable to load project. Please check configuration.');
       }
-    } catch (err) {
-      alert('Failed to load project');
-      console.error(err);
+    } catch (err: any) {
+      // Better error messaging based on error type
+      const errorMessage = err.code === 'PGRST116'
+        ? 'Project not found or access denied.'
+        : 'Failed to load project. Please try again.';
+      alert(errorMessage);
+      console.error('Load project error:', err);
+      // Stay on project list on error for better UX
     }
   };
 

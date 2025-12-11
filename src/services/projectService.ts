@@ -52,7 +52,7 @@ export async function fetchProject(id: string): Promise<Project | null> {
 
   if (error) {
     console.error('Error fetching project:', error);
-    return null;
+    throw error; // Changed: throw instead of return null for consistency
   }
 
   return {
