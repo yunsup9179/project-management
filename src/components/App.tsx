@@ -124,9 +124,10 @@ function App() {
           }
         }
       }
-    } catch (err) {
-      alert('Failed to save project');
-      console.error(err);
+    } catch (err: any) {
+      const errorMessage = err.message || 'Failed to save project';
+      alert(`Failed to save project: ${errorMessage}`);
+      console.error('Save project error:', err);
     } finally {
       setIsSaving(false);
     }
