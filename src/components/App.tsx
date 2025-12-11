@@ -111,6 +111,8 @@ function App() {
           if (tasks.length > 0) {
             setShowChart(true);
           }
+        } else {
+          throw new Error('Failed to update project - returned null');
         }
       } else {
         // Create new project
@@ -122,6 +124,8 @@ function App() {
           if (tasks.length > 0) {
             setShowChart(true);
           }
+        } else {
+          throw new Error('Failed to create project - returned null');
         }
       }
     } catch (err: any) {

@@ -32,19 +32,52 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
-    loadUser();
+    let mounted = true;
+    let timeoutId: NodeJS.Timeout;
+
+    const initAuth = async () => {
+      try {
+        await loadUser();
+      } catch (error) {
+        console.error('Initial auth load error:', error);
+        if (mounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    // Safety timeout: force loading to false after 10 seconds
+    timeoutId = setTimeout(() => {
+      if (mounted && loading) {
+        console.error('Auth loading timeout - forcing loading state to false');
+        setLoading(false);
+      }
+    }, 10000);
+
+    initAuth();
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log('Auth state change:', event, session?.user?.email);
+
       if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-        await loadUser();
+        if (mounted) {
+          await loadUser();
+        }
       } else if (event === 'SIGNED_OUT') {
-        setUser(null);
-        setLoading(false);
+        if (mounted) {
+          setUser(null);
+          setLoading(false);
+        }
+      } else if (event === 'INITIAL_SESSION') {
+        // Initial session already handled by loadUser above
+        console.log('Initial session detected');
       }
     });
 
     return () => {
+      mounted = false;
+      clearTimeout(timeoutId);
       subscription.unsubscribe();
     };
   }, []);
