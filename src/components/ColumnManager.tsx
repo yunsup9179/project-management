@@ -4,9 +4,10 @@ import { CustomField, FieldType } from '../types';
 interface ColumnManagerProps {
   customFields: CustomField[];
   onFieldsChange: (fields: CustomField[]) => void;
+  readOnly?: boolean;
 }
 
-export default function ColumnManager({ customFields, onFieldsChange }: ColumnManagerProps) {
+export default function ColumnManager({ customFields, onFieldsChange, readOnly = false }: ColumnManagerProps) {
   const [fieldName, setFieldName] = useState('');
   const [fieldType, setFieldType] = useState<FieldType>('text');
   const [fieldOptions, setFieldOptions] = useState('');
@@ -42,11 +43,12 @@ export default function ColumnManager({ customFields, onFieldsChange }: ColumnMa
             <span className="field-name">{field.name}</span>
             <span className="field-type">({field.type})</span>
             {field.options && <span className="field-options">Options: {field.options.join(', ')}</span>}
-            <button className="btn-remove" onClick={() => handleRemoveField(field.id)}>Remove</button>
+            {!readOnly && <button className="btn-remove" onClick={() => handleRemoveField(field.id)}>Remove</button>}
           </div>
         ))}
       </div>
 
+      {!readOnly && (
       <div className="add-field-form">
         <input
           type="text"
@@ -70,6 +72,7 @@ export default function ColumnManager({ customFields, onFieldsChange }: ColumnMa
         )}
         <button className="btn-add" onClick={handleAddField}>Add Column</button>
       </div>
+      )}
     </div>
   );
 }

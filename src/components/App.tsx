@@ -21,7 +21,7 @@ const DEFAULT_PHASES: Phase[] = [
 ];
 
 function App() {
-  const { user, loading, signOut } = useAuth();
+  const { user, loading, signOut, isAdmin } = useAuth();
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
   const [currentProjectId, setCurrentProjectId] = useState<string | null>(null);
   const [projectName, setProjectName] = useState('');
@@ -223,11 +223,13 @@ function App() {
                 clientName={clientName}
                 onProjectNameChange={setProjectName}
                 onClientNameChange={setClientName}
+                readOnly={!isAdmin}
               />
 
               <ColumnManager
                 customFields={customFields}
                 onFieldsChange={setCustomFields}
+                readOnly={!isAdmin}
               />
 
               <TaskTable
@@ -236,22 +238,27 @@ function App() {
                 customFields={customFields}
                 onPhasesChange={setPhases}
                 onTasksChange={setTasks}
+                readOnly={!isAdmin}
               />
 
               <div className="actions">
                 <button className="btn-primary" onClick={handleGenerateChart}>
                   Generate Gantt Chart
                 </button>
-                <button
-                  className="btn-primary"
-                  onClick={handleSaveProject}
-                  disabled={isSaving}
-                >
-                  {isSaving ? 'Saving...' : currentProjectId ? 'Update Project' : 'Save Project'}
-                </button>
-                <button className="btn-secondary" onClick={handleExportJSON}>
-                  Export JSON
-                </button>
+                {isAdmin && (
+                  <>
+                    <button
+                      className="btn-primary"
+                      onClick={handleSaveProject}
+                      disabled={isSaving}
+                    >
+                      {isSaving ? 'Saving...' : currentProjectId ? 'Update Project' : 'Save Project'}
+                    </button>
+                    <button className="btn-secondary" onClick={handleExportJSON}>
+                      Export JSON
+                    </button>
+                  </>
+                )}
                 {showChart && (
                   <button className="btn-secondary" onClick={handlePrint}>
                     Print / Save PDF

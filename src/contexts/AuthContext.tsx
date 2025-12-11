@@ -8,6 +8,9 @@ interface AuthContextType {
   loading: boolean;
   signOut: () => Promise<void>;
   refreshUser: () => Promise<void>;
+  isAdmin: boolean;
+  isStaff: boolean;
+  isClient: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -65,8 +68,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await loadUser();
   };
 
+  // Role checks
+  const isAdmin = user?.profile?.role === 'admin';
+  const isStaff = user?.profile?.role === 'staff';
+  const isClient = user?.profile?.role === 'client';
+
   return (
-    <AuthContext.Provider value={{ user, loading, signOut, refreshUser }}>
+    <AuthContext.Provider value={{
+      user,
+      loading,
+      signOut,
+      refreshUser,
+      isAdmin,
+      isStaff,
+      isClient
+    }}>
       {children}
     </AuthContext.Provider>
   );

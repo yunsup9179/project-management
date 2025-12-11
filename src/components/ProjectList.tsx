@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ProjectSummary, fetchAllProjects, deleteProject } from '../services/projectService';
 import { isSupabaseConfigured } from '../lib/supabase';
+import { useAuth } from '../contexts/AuthContext';
 
 interface ProjectListProps {
   onSelectProject: (id: string) => void;
@@ -9,6 +10,7 @@ interface ProjectListProps {
 }
 
 export default function ProjectList({ onSelectProject, onNewProject, currentProjectId }: ProjectListProps) {
+  const { isAdmin } = useAuth();
   const [projects, setProjects] = useState<ProjectSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -86,7 +88,9 @@ export default function ProjectList({ onSelectProject, onNewProject, currentProj
     <div className="project-list">
       <div className="list-header">
         <h2>My Projects</h2>
-        <button className="btn-new-project" onClick={onNewProject}>+ New Project</button>
+        {isAdmin && (
+          <button className="btn-new-project" onClick={onNewProject}>+ New Project</button>
+        )}
       </div>
 
       {loading && <div className="loading">Loading projects...</div>}
@@ -112,17 +116,19 @@ export default function ProjectList({ onSelectProject, onNewProject, currentProj
                 <span className="updated-date">Updated {formatDate(project.updated_at)}</span>
               </div>
             </div>
-            <div className="project-actions">
-              <button
-                className="btn-delete-project"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDelete(project.id, project.name);
-                }}
-              >
-                Delete
-              </button>
-            </div>
+            {isAdmin && (
+              <div className="project-actions">
+                <button
+                  className="btn-delete-project"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(project.id, project.name);
+                  }}
+                >
+                  Delete
+                </button>
+              </div>
+            )}
           </div>
         ))}
       </div>

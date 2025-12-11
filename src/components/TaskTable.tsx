@@ -7,9 +7,10 @@ interface TaskTableProps {
   customFields: CustomField[];
   onPhasesChange: (phases: Phase[]) => void;
   onTasksChange: (tasks: Task[]) => void;
+  readOnly?: boolean;
 }
 
-export default function TaskTable({ phases, tasks, customFields, onPhasesChange, onTasksChange }: TaskTableProps) {
+export default function TaskTable({ phases, tasks, customFields, onPhasesChange, onTasksChange, readOnly = false }: TaskTableProps) {
   const [newTask, setNewTask] = useState<Partial<Task>>({
     phaseId: phases[0]?.id || '',
     name: '',
@@ -50,7 +51,7 @@ export default function TaskTable({ phases, tasks, customFields, onPhasesChange,
             <th>Start</th>
             <th>End</th>
             {customFields.map(f => <th key={f.id}>{f.name}</th>)}
-            <th>Actions</th>
+            {!readOnly && <th>Actions</th>}
           </tr>
         </thead>
         <tbody>
@@ -63,12 +64,13 @@ export default function TaskTable({ phases, tasks, customFields, onPhasesChange,
                 <td>{task.startDate}</td>
                 <td>{task.endDate}</td>
                 {customFields.map(f => <td key={f.id}>{task.customFields[f.name] || '-'}</td>)}
-                <td><button onClick={() => handleRemoveTask(task.id)}>Delete</button></td>
+                {!readOnly && <td><button onClick={() => handleRemoveTask(task.id)}>Delete</button></td>}
               </tr>
             );
           })}
         </tbody>
       </table>
+      {!readOnly && (
       <div className="add-task-form">
         <select value={newTask.phaseId} onChange={(e) => setNewTask({ ...newTask, phaseId: e.target.value })}>
           {phases.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
@@ -96,6 +98,7 @@ export default function TaskTable({ phases, tasks, customFields, onPhasesChange,
         })}
         <button onClick={handleAddTask}>Add Task</button>
       </div>
+      )}
     </div>
   );
 }

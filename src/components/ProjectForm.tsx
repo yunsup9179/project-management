@@ -5,13 +5,15 @@ interface ProjectFormProps {
   clientName: string;
   onProjectNameChange: (name: string) => void;
   onClientNameChange: (name: string) => void;
+  readOnly?: boolean;
 }
 
 export default function ProjectForm({
   projectName,
   clientName,
   onProjectNameChange,
-  onClientNameChange
+  onClientNameChange,
+  readOnly = false
 }: ProjectFormProps) {
   return (
     <div className="project-form">
@@ -24,6 +26,7 @@ export default function ProjectForm({
           value={projectName}
           onChange={(e) => onProjectNameChange(e.target.value)}
           placeholder="e.g., Hyundai Glovis Irvine EV Charger Installation"
+          disabled={readOnly}
         />
       </div>
       <div className="form-group">
@@ -34,6 +37,7 @@ export default function ProjectForm({
           value={clientName}
           onChange={(e) => onClientNameChange(e.target.value)}
           placeholder="e.g., Hyundai Glovis"
+          disabled={readOnly}
         />
       </div>
     </div>

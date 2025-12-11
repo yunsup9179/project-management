@@ -127,6 +127,16 @@ h3 {
   font-size: 14px;
 }
 
+/* Disabled input styling for read-only mode */
+.form-group input:disabled,
+.form-group select:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  opacity: 0.7;
+  color: #666;
+  border-color: #e5e5e5;
+}
+
 .help-text {
   color: #666;
   font-size: 14px;
@@ -177,6 +187,15 @@ h3 {
   border-radius: 4px;
 }
 
+.add-field-form input:disabled,
+.add-field-form select:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  opacity: 0.7;
+  color: #666;
+  border-color: #e5e5e5;
+}
+
 .task-list table {
   width: 100%;
   border-collapse: collapse;
@@ -224,6 +243,15 @@ h3 {
   padding: 8px;
   border: 1px solid #ddd;
   border-radius: 4px;
+}
+
+.form-row input:disabled,
+.form-row select:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  opacity: 0.7;
+  color: #666;
+  border-color: #e5e5e5;
 }
 
 button {
