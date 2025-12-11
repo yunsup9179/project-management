@@ -59,45 +59,46 @@ export default function TaskTable({ phases, tasks, customFields, onPhasesChange,
             const phase = phases.find(p => p.id === task.phaseId);
             return (
               <tr key={task.id}>
-                <td style={{ backgroundColor: phase?.color, color: 'white', padding: '4px 8px' }}>{phase?.name}</td>
+                <td><span className="phase-badge" style={{ backgroundColor: phase?.color }}>{phase?.name}</span></td>
                 <td>{task.name}</td>
                 <td>{task.startDate}</td>
                 <td>{task.endDate}</td>
                 {customFields.map(f => <td key={f.id}>{task.customFields[f.name] || '-'}</td>)}
-                {!readOnly && <td><button onClick={() => handleRemoveTask(task.id)}>Delete</button></td>}
+                {!readOnly && <td><button className="btn-remove" onClick={() => handleRemoveTask(task.id)}>Delete</button></td>}
               </tr>
             );
           })}
         </tbody>
       </table>
       {!readOnly && (
-      <div className="add-task-form">
-        <select value={newTask.phaseId} onChange={(e) => setNewTask({ ...newTask, phaseId: e.target.value })}>
-          {phases.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
-        </select>
-        <input type="text" placeholder="Task name" value={newTask.name} onChange={(e) => setNewTask({ ...newTask, name: e.target.value })} />
-        <input type="date" value={newTask.startDate} onChange={(e) => setNewTask({ ...newTask, startDate: e.target.value })} />
-        <input type="date" value={newTask.endDate} onChange={(e) => setNewTask({ ...newTask, endDate: e.target.value })} />
-        {customFields.map(field => {
-          if (field.type === 'select') {
+        <div className="add-task-form">
+          <select className="select" value={newTask.phaseId} onChange={(e) => setNewTask({ ...newTask, phaseId: e.target.value })}>
+            {phases.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+          </select>
+          <input className="input task-name-input" type="text" placeholder="Task name" value={newTask.name} onChange={(e) => setNewTask({ ...newTask, name: e.target.value })} />
+          <input className="input date-input" type="date" value={newTask.startDate} onChange={(e) => setNewTask({ ...newTask, startDate: e.target.value })} />
+          <input className="input date-input" type="date" value={newTask.endDate} onChange={(e) => setNewTask({ ...newTask, endDate: e.target.value })} />
+          {customFields.map(field => {
+            if (field.type === 'select') {
+              return (
+                <select className="select" key={field.id} onChange={(e) => setNewTask({ ...newTask, customFields: { ...newTask.customFields, [field.name]: e.target.value } })}>
+                  <option value="">{field.name}</option>
+                  {field.options?.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                </select>
+              );
+            }
             return (
-              <select key={field.id} onChange={(e) => setNewTask({ ...newTask, customFields: { ...newTask.customFields, [field.name]: e.target.value } })}>
-                <option value="">{field.name}</option>
-                {field.options?.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-              </select>
+              <input
+                className="input"
+                key={field.id}
+                type={field.type}
+                placeholder={field.name}
+                onChange={(e) => setNewTask({ ...newTask, customFields: { ...newTask.customFields, [field.name]: e.target.value } })}
+              />
             );
-          }
-          return (
-            <input
-              key={field.id}
-              type={field.type}
-              placeholder={field.name}
-              onChange={(e) => setNewTask({ ...newTask, customFields: { ...newTask.customFields, [field.name]: e.target.value } })}
-            />
-          );
-        })}
-        <button onClick={handleAddTask}>Add Task</button>
-      </div>
+          })}
+          <button className="btn-add" onClick={handleAddTask}>Add Task</button>
+        </div>
       )}
     </div>
   );

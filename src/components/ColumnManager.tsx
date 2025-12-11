@@ -49,29 +49,31 @@ export default function ColumnManager({ customFields, onFieldsChange, readOnly =
       </div>
 
       {!readOnly && (
-      <div className="add-field-form">
-        <input
-          type="text"
-          placeholder="Column name (e.g., Assignee)"
-          value={fieldName}
-          onChange={(e) => setFieldName(e.target.value)}
-        />
-        <select value={fieldType} onChange={(e) => setFieldType(e.target.value as FieldType)}>
-          <option value="text">Text</option>
-          <option value="select">Dropdown</option>
-          <option value="date">Date</option>
-          <option value="number">Number</option>
-        </select>
-        {fieldType === 'select' && (
+        <div className="add-field-form">
           <input
+            className="input"
             type="text"
-            placeholder="Options (comma-separated)"
-            value={fieldOptions}
-            onChange={(e) => setFieldOptions(e.target.value)}
+            placeholder="Column name (e.g., Assignee)"
+            value={fieldName}
+            onChange={(e) => setFieldName(e.target.value)}
           />
-        )}
-        <button className="btn-add" onClick={handleAddField}>Add Column</button>
-      </div>
+          <select className="select" value={fieldType} onChange={(e) => setFieldType(e.target.value as FieldType)}>
+            <option value="text">Text</option>
+            <option value="select">Dropdown</option>
+            <option value="date">Date</option>
+            <option value="number">Number</option>
+          </select>
+          {fieldType === 'select' && (
+            <input
+              className="input"
+              type="text"
+              placeholder="Options (comma-separated)"
+              value={fieldOptions}
+              onChange={(e) => setFieldOptions(e.target.value)}
+            />
+          )}
+          <button className="btn-add" onClick={handleAddField}>Add Column</button>
+        </div>
       )}
     </div>
   );

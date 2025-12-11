@@ -22,6 +22,7 @@ export default function ProjectForm({
         <label htmlFor="projectName">Project Name</label>
         <input
           id="projectName"
+          className="input"
           type="text"
           value={projectName}
           onChange={(e) => onProjectNameChange(e.target.value)}
@@ -33,6 +34,7 @@ export default function ProjectForm({
         <label htmlFor="clientName">Client Name</label>
         <input
           id="clientName"
+          className="input"
           type="text"
           value={clientName}
           onChange={(e) => onClientNameChange(e.target.value)}

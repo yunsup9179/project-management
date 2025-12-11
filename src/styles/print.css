@@ -1,165 +1,190 @@
 @media print {
-  body {
-    padding: 0;
-    margin: 0;
-    background: white;
+  @page {
+    size: landscape;
+    margin: 0.5cm;
   }
 
-  .no-print {
+  body {
+    background: white;
+    font-family: "Inter", sans-serif;
+    color: #000;
+  }
+
+  .no-print,
+  .app-header,
+  .nav-buttons,
+  .actions,
+  .editor-container,
+  .btn-primary,
+  .btn-secondary,
+  .user-menu,
+  button {
     display: none !important;
+  }
+
+  .app {
+    padding: 0;
+    max-width: 100%;
+    margin: 0;
   }
 
   .chart-section {
     margin: 0;
     padding: 0;
+    border: none;
+    box-shadow: none;
   }
 
   .gantt-container {
     width: 100%;
-    max-width: none;
+    border: none;
   }
 
-  @page {
-    size: landscape;
-    margin: 1cm;
+  .gantt-header {
+    margin-bottom: 20px;
+    border-bottom: 2px solid #000;
+  }
+
+  .gantt-header h1 {
+    font-size: 24pt;
+    color: #000;
+  }
+
+  .subtitle {
+    font-size: 14pt;
+    color: #444;
+  }
+
+  .sidebar {
+    background-color: #fff !important;
+  }
+
+  .sidebar-header,
+  .timeline-header {
+    background-color: #f0f0f0 !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .bar {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
   }
 }
 
+/* Base Gantt styles that shouldn't be overridden by App.css resets if we want specific look */
 .gantt-container {
-  background: white;
-  padding: 20px;
-  -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
+  overflow-x: auto;
 }
 
 .gantt-header {
-  border-bottom: 2px solid #333;
-  padding-bottom: 15px;
-  margin-bottom: 20px;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-}
-
-.gantt-header h1 {
-  font-size: 24px;
-  color: #1a1a1a;
-  margin-bottom: 5px;
-}
-
-.subtitle {
-  font-size: 16px;
-  color: #666;
-  font-weight: 500;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .logo {
-  font-weight: bold;
-  color: #002c5f;
-  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--primary);
 }
 
 .chart-wrapper {
   display: flex;
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
   overflow: hidden;
 }
 
 .sidebar {
-  width: 350px;
+  width: 300px;
   flex-shrink: 0;
-  border-right: 1px solid #e0e0e0;
-  background-color: #fafafa;
+  border-right: 1px solid var(--border-subtle);
+  background-color: var(--bg-muted);
 }
 
 .sidebar-header {
-  height: 50px;
-  background: #f5f5f5;
-  border-bottom: 1px solid #e0e0e0;
+  height: 48px;
+  background-color: var(--bg-muted);
+  border-bottom: 1px solid var(--border-subtle);
   display: flex;
   align-items: center;
-  padding-left: 15px;
-  font-weight: bold;
-  font-size: 13px;
-  color: #555;
+  padding-left: 16px;
+  font-size: 11px;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
 }
 
 .phase-header {
-  padding: 10px 15px;
-  font-size: 12px;
+  padding: 8px 16px;
+  font-size: 11px;
   font-weight: 700;
-  color: #333;
-  border-bottom: 1px solid #e0e0e0;
-  border-top: 1px solid #e0e0e0;
-  letter-spacing: 0.5px;
+  background-color: rgba(0, 0, 0, 0.02);
+  border-bottom: 1px solid var(--border-subtle);
+  border-top: 1px solid var(--border-subtle);
 }
 
 .task-row {
-  height: 40px;
+  height: 36px;
+  padding: 0 16px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 0 15px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--border-subtle);
   background: white;
 }
 
 .task-name {
   font-size: 13px;
   font-weight: 500;
-  color: #333;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .task-date {
-  font-size: 11px;
-  color: #888;
-  margin-top: 2px;
+  font-size: 10px;
+  color: var(--text-light);
 }
 
 .timeline {
   flex-grow: 1;
-  position: relative;
   background: white;
-  overflow: hidden;
+  overflow-x: auto;
 }
 
 .timeline-header {
-  height: 50px;
   display: flex;
-  border-bottom: 1px solid #e0e0e0;
-  background: #f5f5f5;
+  height: 48px;
+  border-bottom: 1px solid var(--border-subtle);
+  background-color: var(--bg-muted);
 }
 
 .month-cell {
-  border-right: 1px solid #e0e0e0;
+  border-right: 1px solid var(--border-subtle);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
-  color: #555;
   text-transform: uppercase;
-}
-
-.bars-container {
-  position: relative;
+  color: var(--text-muted);
 }
 
 .timeline-phase-spacer {
-  height: 37px;
-  border-bottom: 1px solid #f0f0f0;
-  background: #fafafa;
-  opacity: 0.5;
+  height: 30px;
+  /* matched phase-header height roughly */
+  background-color: rgba(0, 0, 0, 0.02);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .bar-row {
-  height: 40px;
+  height: 36px;
+  /* matched task-row */
   border-bottom: 1px solid transparent;
   position: relative;
   width: 100%;
@@ -167,44 +192,41 @@
 
 .bar {
   position: absolute;
-  top: 10px;
+  top: 8px;
   height: 20px;
   border-radius: 4px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-  display: flex;
-  align-items: center;
-  padding: 0 8px;
   font-size: 10px;
   color: white;
-  overflow: hidden;
+  padding: 0 6px;
+  display: flex;
+  align-items: center;
   white-space: nowrap;
-  font-weight: 600;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .bar.milestone {
   width: 14px;
   height: 14px;
-  top: 13px;
   transform: rotate(45deg);
-  border-radius: 2px;
   border: 2px solid white;
-  padding: 0;
+  top: 11px;
 }
 
 .legend {
   margin-top: 20px;
   display: flex;
   gap: 20px;
-  font-size: 12px;
-  color: #555;
   padding-top: 10px;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--border-subtle);
 }
 
 .legend-item {
   display: flex;
   align-items: center;
   gap: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
 }
 
 .legend-box {
