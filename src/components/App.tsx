@@ -44,7 +44,8 @@ function App() {
         setCustomFields(project.customFields);
         setPhases(project.phases.length > 0 ? project.phases : DEFAULT_PHASES);
         setTasks(project.tasks);
-        setShowChart(false);
+        // Automatically show chart if project has tasks
+        setShowChart(project.tasks.length > 0);
         setShowProjectList(false);
       }
     } catch (err) {
@@ -98,6 +99,10 @@ function App() {
         const updated = await updateProject(currentProjectId, projectData);
         if (updated) {
           alert('Project updated successfully!');
+          // Auto-show chart if there are tasks
+          if (tasks.length > 0) {
+            setShowChart(true);
+          }
         }
       } else {
         // Create new project
@@ -105,6 +110,10 @@ function App() {
         if (created) {
           setCurrentProjectId(created.id);
           alert('Project saved successfully!');
+          // Auto-show chart if there are tasks
+          if (tasks.length > 0) {
+            setShowChart(true);
+          }
         }
       }
     } catch (err) {
@@ -181,7 +190,7 @@ function App() {
       <div className="no-print">
         <header className="app-header">
           <div>
-            <h1>Gantt Chart Generator</h1>
+            <h1>Project Management Dashboard</h1>
             <p>Build professional project schedules for EV charging installations</p>
           </div>
           <div className="user-menu">

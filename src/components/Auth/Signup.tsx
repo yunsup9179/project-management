@@ -50,7 +50,7 @@ export default function Signup({ onSuccess, onSwitchToLogin }: SignupProps) {
     <div className="auth-container">
       <div className="auth-card">
         <h2>Create Account</h2>
-        <p className="auth-subtitle">Join your team's Gantt projects</p>
+        <p className="auth-subtitle">Join your team's projects</p>
 
         {error && <div className="error-message">{error}</div>}
 
