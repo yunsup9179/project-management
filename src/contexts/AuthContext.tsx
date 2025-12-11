@@ -51,12 +51,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setLoading(true);
       await authSignOut();
       setUser(null);
+      // Force page reload to clear all state
+      window.location.reload();
     } catch (error) {
       console.error('Error signing out:', error);
-      // Even if signOut fails, clear local state
+      // Even if signOut fails, clear local state and reload
       setUser(null);
-    } finally {
-      setLoading(false);
+      window.location.reload();
     }
   };
 
