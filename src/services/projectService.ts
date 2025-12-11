@@ -73,6 +73,15 @@ export async function createProject(project: Omit<Project, 'id' | 'createdAt'>, 
     return null;
   }
 
+  console.log('Creating project with userId:', userId);
+  console.log('Project data:', {
+    name: project.name,
+    client: project.client,
+    customFields: project.customFields,
+    phases: project.phases,
+    tasks: project.tasks
+  });
+
   const { data, error } = await supabase
     .from('projects')
     .insert({
@@ -88,8 +97,16 @@ export async function createProject(project: Omit<Project, 'id' | 'createdAt'>, 
 
   if (error) {
     console.error('Error creating project:', error);
+    console.error('Error details:', {
+      message: error.message,
+      code: error.code,
+      details: error.details,
+      hint: error.hint
+    });
     throw error;
   }
+
+  console.log('Project created successfully:', data);
 
   return {
     id: data.id,
