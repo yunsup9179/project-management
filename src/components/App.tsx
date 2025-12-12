@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
-import { Project, Phase, Task, CustomField } from '../types';
+import { Project, Phase, Task, CustomField, ProgressStatus } from '../types';
 import { useAuth } from '../contexts/AuthContext';
 import Login from './Auth/Login';
 import Signup from './Auth/Signup';
 import ProjectList from './ProjectList';
 import ProjectForm from './ProjectForm';
+import ProgressSection from './ProgressSection';
 import ColumnManager from './ColumnManager';
 import TaskTable from './TaskTable';
 import GanttChart from './GanttChart';
+import NotesSection from './NotesSection';
+import BudgetSection from './BudgetSection';
+import PermitsSection from './PermitsSection';
+import UtilitiesSection from './UtilitiesSection';
 import { exportProjectAsJSON } from '../utils/storage';
 import { createProject, updateProject, fetchProject } from '../services/projectService';
 import { isSupabaseConfigured } from '../lib/supabase';
@@ -21,7 +26,7 @@ const DEFAULT_PHASES: Phase[] = [
 ];
 
 function App() {
-  const { user, loading, signOut, isAdmin } = useAuth();
+  const { user, loading, signOut, isAdmin, isStaff, isClient } = useAuth();
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
   const [currentProjectId, setCurrentProjectId] = useState<string | null>(null);
   const [projectName, setProjectName] = useState('');
@@ -32,6 +37,9 @@ function App() {
   const [showChart, setShowChart] = useState(false);
   const [showProjectList, setShowProjectList] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  // Progress state
+  const [progressStatus, setProgressStatus] = useState<ProgressStatus>('Pending');
+  const [progressPercent, setProgressPercent] = useState(0);
 
   // Load project from Supabase
   const loadProject = async (id: string) => {
@@ -44,6 +52,9 @@ function App() {
         setCustomFields(project.customFields);
         setPhases(project.phases.length > 0 ? project.phases : DEFAULT_PHASES);
         setTasks(project.tasks);
+        // Load progress fields
+        setProgressStatus(project.progress_status || 'Pending');
+        setProgressPercent(project.progress_percent || 0);
         // Automatically show chart if project has tasks
         setShowChart(project.tasks.length > 0);
         setShowProjectList(false);
@@ -70,6 +81,8 @@ function App() {
     setCustomFields([]);
     setPhases(DEFAULT_PHASES);
     setTasks([]);
+    setProgressStatus('Pending');
+    setProgressPercent(0);
     setShowChart(false);
     setShowProjectList(false);
   };
@@ -99,7 +112,9 @@ function App() {
         client: clientName,
         customFields,
         phases,
-        tasks
+        tasks,
+        progress_status: progressStatus,
+        progress_percent: progressPercent
       };
 
       if (currentProjectId) {
@@ -239,6 +254,22 @@ function App() {
                 readOnly={!isAdmin}
               />
 
+              <ProgressSection
+                status={progressStatus}
+                percent={progressPercent}
+                onStatusChange={setProgressStatus}
+                onPercentChange={setProgressPercent}
+                readOnly={!isAdmin}
+              />
+
+              {/* Budget: Admin/Staff only, hidden from Client */}
+              {!isClient && (
+                <BudgetSection
+                  projectId={currentProjectId}
+                  readOnly={!isAdmin}
+                />
+              )}
+
               <ColumnManager
                 customFields={customFields}
                 onFieldsChange={setCustomFields}
@@ -252,6 +283,21 @@ function App() {
                 onPhasesChange={setPhases}
                 onTasksChange={setTasks}
                 readOnly={!isAdmin}
+              />
+
+              <PermitsSection
+                projectId={currentProjectId}
+                readOnly={!isAdmin}
+              />
+
+              <UtilitiesSection
+                projectId={currentProjectId}
+                readOnly={!isAdmin}
+              />
+
+              <NotesSection
+                projectId={currentProjectId}
+                canEdit={isAdmin || isStaff}
               />
 
               <div className="actions">

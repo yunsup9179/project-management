@@ -431,6 +431,33 @@ button,
   border-bottom: none;
 }
 
+/* Table editing styles */
+.task-table tr {
+  cursor: pointer;
+}
+
+.task-table tr[data-editing="true"] {
+  background-color: var(--primary-soft);
+}
+
+.table-input,
+.table-select {
+  width: 100%;
+  padding: 6px 10px;
+  font-size: 14px;
+  border: 1px solid var(--border-focus);
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-card);
+  color: var(--text-main);
+}
+
+.table-input:focus,
+.table-select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+
 /* =========================================
    COMPONENT: CUSTOM FIELD LIST
    ========================================= */
@@ -509,6 +536,36 @@ button,
   font-weight: 600;
 }
 
+/* Project card progress */
+.project-progress {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin: var(--space-sm) 0;
+}
+
+.progress-bar-mini {
+  flex: 1;
+  height: 6px;
+  background: var(--bg-muted);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progress-bar-mini-fill {
+  height: 100%;
+  background: var(--primary);
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  min-width: 32px;
+}
+
 /* =========================================
    COMPONENT: SHARED UTILS & HELPERS
    ========================================= */
@@ -535,6 +592,456 @@ button,
   padding: 6px 12px;
   border-radius: var(--radius-full);
   font-weight: 600;
+}
+
+/* =========================================
+   COMPONENT: PROGRESS SECTION
+   ========================================= */
+.progress-section {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-subtle);
+  padding: var(--space-xl);
+  margin-bottom: var(--space-lg);
+}
+
+.progress-section h2 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: var(--space-lg);
+}
+
+.progress-content {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: var(--space-xl);
+  align-items: start;
+}
+
+.progress-status-group,
+.progress-percent-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.progress-slider {
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  appearance: none;
+  background: var(--border-subtle);
+  cursor: pointer;
+}
+
+.progress-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--primary);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 12px;
+  background: var(--bg-muted);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-top: var(--space-sm);
+}
+
+.progress-bar-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+}
+
+/* =========================================
+   COMPONENT: NOTES SECTION
+   ========================================= */
+.notes-section {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-subtle);
+  padding: var(--space-xl);
+  margin-bottom: var(--space-lg);
+}
+
+.notes-section h2 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: var(--space-lg);
+}
+
+.note-form {
+  margin-bottom: var(--space-xl);
+  padding-bottom: var(--space-lg);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.note-form-header {
+  margin-bottom: var(--space-sm);
+}
+
+.note-tag-select {
+  width: auto;
+  min-width: 120px;
+}
+
+.note-textarea {
+  width: 100%;
+  min-height: 80px;
+  resize: vertical;
+  margin-bottom: var(--space-sm);
+}
+
+.notes-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.note-item {
+  padding: var(--space-md);
+  background: var(--bg-muted);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+}
+
+.note-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.note-tag-badge {
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.note-author {
+  font-weight: 500;
+  color: var(--text-main);
+  font-size: 13px;
+}
+
+.note-date {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.btn-delete-note {
+  margin-left: auto;
+  padding: 2px 8px;
+  font-size: 11px;
+  color: var(--danger);
+  background: none;
+  border: 1px solid var(--danger);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.btn-delete-note:hover {
+  background: var(--danger);
+  color: white;
+}
+
+.note-content {
+  color: var(--text-main);
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.notes-empty,
+.notes-loading {
+  color: var(--text-muted);
+  font-size: 14px;
+  text-align: center;
+  padding: var(--space-lg);
+}
+
+/* =========================================
+   COMPONENT: BUDGET SECTION
+   ========================================= */
+.budget-section {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-subtle);
+  padding: var(--space-xl);
+  margin-bottom: var(--space-lg);
+}
+
+.budget-section h2 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: var(--space-lg);
+}
+
+.budget-summary {
+  display: flex;
+  gap: var(--space-xl);
+  padding: var(--space-lg);
+  background: var(--bg-muted);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-lg);
+}
+
+.budget-summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.budget-summary-item.total {
+  margin-left: auto;
+  padding-left: var(--space-xl);
+  border-left: 2px solid var(--border-subtle);
+}
+
+.budget-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.budget-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.budget-value.change-order {
+  color: var(--warning);
+}
+
+.budget-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: var(--space-lg);
+}
+
+.budget-table th,
+.budget-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.budget-table th {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.budget-amount {
+  font-weight: 500;
+  font-family: 'SF Mono', 'Consolas', monospace;
+}
+
+.budget-type-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.budget-type-badge.original {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.budget-type-badge.change_order {
+  background: #FEF3C7;
+  color: #D97706;
+}
+
+.btn-delete-budget {
+  padding: 4px 8px;
+  font-size: 11px;
+  color: var(--danger);
+  background: none;
+  border: 1px solid var(--danger);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.btn-delete-budget:hover {
+  background: var(--danger);
+  color: white;
+}
+
+.budget-form {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: center;
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.budget-form .input {
+  flex: 1;
+}
+
+.budget-amount-input {
+  max-width: 150px !important;
+  flex: 0 0 150px !important;
+}
+
+.budget-empty,
+.budget-loading {
+  color: var(--text-muted);
+  font-size: 14px;
+  text-align: center;
+  padding: var(--space-lg);
+}
+
+/* =========================================
+   COMPONENT: PERMITS & UTILITIES SECTIONS
+   ========================================= */
+.permits-section,
+.utilities-section {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-subtle);
+  padding: var(--space-xl);
+  margin-bottom: var(--space-lg);
+}
+
+.permits-section h2,
+.utilities-section h2 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-lg);
+}
+
+.btn-add-small {
+  padding: 6px 12px;
+  font-size: 13px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.btn-add-small:hover {
+  background: var(--primary-hover);
+}
+
+.permit-add-form,
+.utility-add-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-sm);
+  padding: var(--space-lg);
+  background: var(--bg-muted);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-lg);
+}
+
+.form-actions {
+  display: flex;
+  gap: var(--space-sm);
+  grid-column: 1 / -1;
+}
+
+.permits-table,
+.utilities-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.permits-table th,
+.permits-table td,
+.utilities-table th,
+.utilities-table td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 13px;
+}
+
+.permits-table th,
+.utilities-table th {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.status-select {
+  padding: 4px 8px;
+  font-size: 12px;
+  min-width: 130px;
+}
+
+.notes-cell {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.btn-delete-small {
+  padding: 4px 8px;
+  font-size: 11px;
+  color: var(--danger);
+  background: none;
+  border: 1px solid var(--danger);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.btn-delete-small:hover {
+  background: var(--danger);
+  color: white;
+}
+
+.permits-empty,
+.permits-loading,
+.utilities-empty,
+.utilities-loading {
+  color: var(--text-muted);
+  font-size: 14px;
+  text-align: center;
+  padding: var(--space-lg);
 }
 
 /* =========================================

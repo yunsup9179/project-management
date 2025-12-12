@@ -111,6 +111,15 @@ export default function ProjectList({ onSelectProject, onNewProject, currentProj
             <div className="project-card-content" onClick={() => onSelectProject(project.id)}>
               <h3>{project.name}</h3>
               <p className="client-name">{project.client}</p>
+              <div className="project-progress">
+                <div className="progress-bar-mini">
+                  <div
+                    className="progress-bar-mini-fill"
+                    style={{ width: `${project.progress_percent}%` }}
+                  />
+                </div>
+                <span className="progress-text">{project.progress_percent}%</span>
+              </div>
               <div className="project-meta">
                 <span className="task-count">{project.taskCount} tasks</span>
                 <span className="updated-date">Updated {formatDate(project.updated_at)}</span>

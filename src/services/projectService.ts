@@ -8,6 +8,8 @@ export interface ProjectSummary {
   created_at: string;
   updated_at: string;
   taskCount: number;
+  progress_status: string;
+  progress_percent: number;
 }
 
 // Fetch all projects (summary view)
@@ -19,7 +21,7 @@ export async function fetchAllProjects(): Promise<ProjectSummary[]> {
 
   const { data, error } = await supabase
     .from('projects')
-    .select('id, name, client, created_at, updated_at, tasks')
+    .select('id, name, client, created_at, updated_at, tasks, progress_status, progress_percent')
     .order('updated_at', { ascending: false });
 
   if (error) {
@@ -33,7 +35,9 @@ export async function fetchAllProjects(): Promise<ProjectSummary[]> {
     client: p.client,
     created_at: p.created_at,
     updated_at: p.updated_at,
-    taskCount: Array.isArray(p.tasks) ? p.tasks.length : 0
+    taskCount: Array.isArray(p.tasks) ? p.tasks.length : 0,
+    progress_status: p.progress_status || 'Pending',
+    progress_percent: p.progress_percent || 0
   }));
 }
 
@@ -62,7 +66,9 @@ export async function fetchProject(id: string): Promise<Project | null> {
     createdAt: data.created_at,
     customFields: data.custom_fields || [],
     phases: data.phases || [],
-    tasks: data.tasks || []
+    tasks: data.tasks || [],
+    progress_status: data.progress_status || 'Pending',
+    progress_percent: data.progress_percent || 0
   };
 }
 
@@ -90,7 +96,9 @@ export async function createProject(project: Omit<Project, 'id' | 'createdAt'>, 
       owner_id: userId,
       custom_fields: project.customFields,
       phases: project.phases,
-      tasks: project.tasks
+      tasks: project.tasks,
+      progress_status: project.progress_status || 'Pending',
+      progress_percent: project.progress_percent || 0
     })
     .select()
     .single();
@@ -116,7 +124,9 @@ export async function createProject(project: Omit<Project, 'id' | 'createdAt'>, 
     customFields: data.custom_fields || [],
     phases: data.phases || [],
     tasks: data.tasks || [],
-    owner_id: data.owner_id
+    owner_id: data.owner_id,
+    progress_status: data.progress_status || 'Pending',
+    progress_percent: data.progress_percent || 0
   };
 }
 
@@ -133,6 +143,8 @@ export async function updateProject(id: string, project: Partial<Omit<Project, '
   if (project.customFields !== undefined) updateData.custom_fields = project.customFields;
   if (project.phases !== undefined) updateData.phases = project.phases;
   if (project.tasks !== undefined) updateData.tasks = project.tasks;
+  if (project.progress_status !== undefined) updateData.progress_status = project.progress_status;
+  if (project.progress_percent !== undefined) updateData.progress_percent = project.progress_percent;
 
   const { data, error } = await supabase
     .from('projects')
@@ -153,7 +165,9 @@ export async function updateProject(id: string, project: Partial<Omit<Project, '
     createdAt: data.created_at,
     customFields: data.custom_fields || [],
     phases: data.phases || [],
-    tasks: data.tasks || []
+    tasks: data.tasks || [],
+    progress_status: data.progress_status || 'Pending',
+    progress_percent: data.progress_percent || 0
   };
 }
 
