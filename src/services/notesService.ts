@@ -28,16 +28,19 @@ export async function fetchProjectNotes(projectId: string): Promise<ProjectNote[
     throw error;
   }
 
-  return (data || []).map(note => ({
-    id: note.id,
-    project_id: note.project_id,
-    content: note.content,
-    note_tag: note.note_tag || 'general',
-    created_at: note.created_at,
-    updated_at: note.updated_at,
-    author_id: note.author_id,
-    author_name: note.profiles?.full_name || note.profiles?.email || 'Unknown'
-  }));
+  return (data || []).map(note => {
+    const profile = Array.isArray(note.profiles) ? note.profiles[0] : note.profiles;
+    return {
+      id: note.id,
+      project_id: note.project_id,
+      content: note.content,
+      note_tag: note.note_tag || 'general',
+      created_at: note.created_at,
+      updated_at: note.updated_at,
+      author_id: note.author_id,
+      author_name: profile?.full_name || profile?.email || 'Unknown'
+    };
+  });
 }
 
 // Create a new note
@@ -76,6 +79,7 @@ export async function createNote(
     throw error;
   }
 
+  const profile = Array.isArray(data.profiles) ? data.profiles[0] : data.profiles;
   return {
     id: data.id,
     project_id: data.project_id,
@@ -84,7 +88,7 @@ export async function createNote(
     created_at: data.created_at,
     updated_at: data.updated_at,
     author_id: data.author_id,
-    author_name: data.profiles?.full_name || data.profiles?.email || 'Unknown'
+    author_name: profile?.full_name || profile?.email || 'Unknown'
   };
 }
 
@@ -123,6 +127,7 @@ export async function updateNote(
     throw error;
   }
 
+  const profile = Array.isArray(data.profiles) ? data.profiles[0] : data.profiles;
   return {
     id: data.id,
     project_id: data.project_id,
@@ -131,7 +136,7 @@ export async function updateNote(
     created_at: data.created_at,
     updated_at: data.updated_at,
     author_id: data.author_id,
-    author_name: data.profiles?.full_name || data.profiles?.email || 'Unknown'
+    author_name: profile?.full_name || profile?.email || 'Unknown'
   };
 }
 
